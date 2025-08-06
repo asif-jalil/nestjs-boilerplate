@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    if (isUnauth) {
+    if (isUnauth || isPublic) {
       return true;
     }
 
@@ -39,7 +39,8 @@ export class AuthGuard implements CanActivate {
     const token = this.token.extract(request);
 
     if (isPublic) {
-      request.token = token as string;
+      if (token) request.token = token;
+
       return true;
     }
 

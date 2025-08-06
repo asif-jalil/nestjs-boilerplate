@@ -13,12 +13,12 @@ export class AppExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status = exception.status;
-    const message = exception.response.message as object;
+    const message = exception.response.message as unknown;
     const code = exception.response.code as string;
 
     response.status(status).json({
-      statusCode: status,
-      ...message,
+      success: false,
+      message,
       code,
     });
   }

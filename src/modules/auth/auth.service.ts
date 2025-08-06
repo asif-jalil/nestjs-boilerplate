@@ -79,17 +79,13 @@ export class AuthService {
 
   async authAccount(token: string) {
     if (!token) {
-      throw new BadRequestException({
-        message: "Invalid request",
-      });
+      throw new BadRequestException("Invalid request");
     }
 
     const payload = this.token.decodeToken(token);
 
     if (!payload.isValid) {
-      throw new UnauthenticatedException({
-        message: "You are not authenticated",
-      });
+      throw new UnauthenticatedException("You are not authenticated");
     }
 
     const user = await this.userRepo.findOne({
@@ -98,9 +94,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new NotFoundException({
-        message: "Invalid user",
-      });
+      throw new NotFoundException("Invalid user");
     }
 
     const authUser = await this.getAuthUser(user.id);

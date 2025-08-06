@@ -3,7 +3,6 @@ import {
   IsEnum,
   IsNotEmpty,
   IsOptional,
-  Matches,
   MaxLength,
   MinLength,
   ValidateIf,
@@ -31,12 +30,8 @@ export class RegisterDto {
   email: string;
 
   @IsNotEmpty({ message: "Password is required" })
-  @Matches(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).+$/, {
-    message:
-      "Password must contain at least one letter, one number, and one special character",
-  })
   @MaxLength(64, { message: ValidationMessages.maxLength("Password", 64) })
-  @MinLength(6, { message: ValidationMessages.minLength("Password", 6) })
+  @MinLength(4, { message: ValidationMessages.minLength("Password", 4) })
   @Trim()
   @ApiProperty()
   password: string;
@@ -44,7 +39,6 @@ export class RegisterDto {
   @IsEnum(NON_ADMIN_ROLES, { message: "Invalid role" })
   @ValidateIf((o: RegisterDto) => o.role !== RolesEnum.ADMIN)
   @IsNotEmpty({ message: "Role is required" })
-  @IsOptional()
   @Trim()
   @ApiProperty({ enum: NON_ADMIN_ROLES, default: RolesEnum.USER })
   role: RolesEnum;

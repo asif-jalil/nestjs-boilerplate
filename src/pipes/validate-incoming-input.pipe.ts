@@ -1,6 +1,6 @@
 import { Injectable, ValidationError, ValidationPipe } from "@nestjs/common";
 
-import BadRequestException from "../exceptions/bad-request.exception";
+import UnprocessableException from "src/exceptions/unprocessable.exception";
 
 function exceptionFactory(validationErrors: ValidationError[]) {
   const errors: Record<string, string> = {};
@@ -23,7 +23,7 @@ function exceptionFactory(validationErrors: ValidationError[]) {
 
   mapErrors(validationErrors);
 
-  return new BadRequestException(errors);
+  return new UnprocessableException(errors);
 }
 
 @Injectable()
@@ -32,11 +32,7 @@ export class ValidateIncomingInput extends ValidationPipe {
     options = {
       ...options,
       stopAtFirstError: true,
-      // whitelist will be handled manually in the StripRequestBodyPipe
-      // so we set it to false here
-      // this is because we need to validate the incoming data first
-      // and then strip the unwanted properties
-      whitelist: false,
+      whitelist: true,
       exceptionFactory: exceptionFactory,
       transform: true,
     };

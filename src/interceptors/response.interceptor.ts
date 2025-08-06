@@ -20,6 +20,7 @@ export class ResponseInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data: Record<string, any>) => ({
+        success: true,
         message,
         data: data ?? {},
       })),

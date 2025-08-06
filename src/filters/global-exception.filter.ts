@@ -20,7 +20,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const code = exception.response?.code || "GlobalError";
 
     response.status(status).json({
-      statusCode: status,
+      success: false,
       message,
       code,
     });

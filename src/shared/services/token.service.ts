@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
-import { ONE_DAY } from "src/constants/duration";
 import { User } from "src/modules/user/user.entity";
 import { EnvService } from "src/shared/services/env.service";
 import { EncryptionService } from "./encryption.service";
@@ -39,7 +38,7 @@ export class TokenService {
     };
 
     const token = await this.jwt.signAsync(data, {
-      expiresIn: ONE_DAY / 1000,
+      expiresIn: "7d",
       secret: this.env.authConfig.jwtSecret,
     });
 

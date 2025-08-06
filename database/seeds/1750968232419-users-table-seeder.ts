@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { RolesEnum } from "src/constants/role.enum";
 import { User } from "src/modules/user/user.entity";
 import { DataSource } from "typeorm";
@@ -8,26 +9,20 @@ export class UsersTableSeeder1750968232419 implements Seeder {
 
   public async run(dataSource: DataSource): Promise<any> {
     const userRepo = dataSource.getRepository(User);
+    const hashedPassword = await bcrypt.hash("1234", 12);
 
     const users = [
       {
         name: "Admin",
         email: "admin@mail.com",
-        password: "defaultPass123!",
+        password: hashedPassword,
         role: RolesEnum.ADMIN,
-        verifiedAt: new Date(),
-      },
-      {
-        name: "Reseller",
-        email: "reseller@mail.com",
-        password: "defaultPass123!",
-        role: RolesEnum.RESELLER,
         verifiedAt: new Date(),
       },
       {
         name: "User",
         email: "user@mail.com",
-        password: "defaultPass123!",
+        password: hashedPassword,
         role: RolesEnum.USER,
         verifiedAt: new Date(),
       },

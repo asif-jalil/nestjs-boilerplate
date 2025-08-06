@@ -60,7 +60,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
     notFoundMessage = "Resource not found",
   ): Promise<SelectFields<T, Options>> {
     const result = await this.findOne(findOneArgs);
-    if (!result) throw new NotFoundException({ message: notFoundMessage });
+    if (!result) throw new NotFoundException(notFoundMessage);
     return result;
   }
 

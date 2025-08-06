@@ -6,9 +6,7 @@ import * as fs from "fs/promises";
 import Handlebars from "handlebars";
 import { htmlToText } from "html-to-text";
 import path from "path";
-import { MailConfig } from "src/config/mail";
 import { InAppEmail, Queues } from "src/constants/queue.enum";
-import { GetInTouchDto } from "src/modules/contact/dto/get-in-touch";
 import { EnvService } from "src/shared/services/env.service";
 
 export type SendEmail = {
@@ -60,37 +58,23 @@ export class InAppEmailConsumer extends WorkerHost {
     await this.mailService.sendMail(config);
   }
 
-  async process(job: Job<GetInTouchDto>): Promise<any> {
+  async process(job: Job): Promise<any> {
     switch (job.name) {
       case InAppEmail.GET_IN_TOUCH.toString(): {
-        const data = job.data;
-        await this.sendEmail({
-          to: {
-            name: MailConfig.TO_NAME,
-            address: MailConfig.TO_EMAIL,
-          },
-          replyTo: {
-            name: data.firstName,
-            address: data.email,
-          },
-          subject: "Hurry: New submission coming",
-          template: "get-in-touch",
-          context: { ...data },
-        });
-
-        await this.sendEmail({
-          to: {
-            name: data.firstName,
-            address: data.email,
-          },
-          from: {
-            name: MailConfig.FROM_NAME,
-            address: MailConfig.FROM_EMAIL,
-          },
-          subject: "Backup247: Get a quote",
-          template: "get-in-touch-confirmation",
-          context: { ...data },
-        });
+        // const data = job.data;
+        // await this.sendEmail({
+        //   to: {
+        //     name: MailConfig.TO_NAME,
+        //     address: MailConfig.TO_EMAIL,
+        //   },
+        //   replyTo: {
+        //     name: data.firstName,
+        //     address: data.email,
+        //   },
+        //   subject: "Hurry: New submission coming",
+        //   template: "get-in-touch",
+        //   context: { ...data },
+        // });
 
         return;
       }

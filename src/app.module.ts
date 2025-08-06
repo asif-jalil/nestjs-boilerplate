@@ -17,14 +17,11 @@ import { AppExceptionFilter } from "./filters/app-exception.filter";
 import { GlobalExceptionFilter } from "./filters/global-exception.filter";
 import { AuthGuard } from "./guards/auth.guard";
 import { RolesGuard } from "./guards/roles.guard";
-import { RequestInterceptor } from "./interceptors/request.interceptor";
 import { ResponseInterceptor } from "./interceptors/response.interceptor";
 import { AuthModule } from "./modules/auth/auth.module";
-import { ContactModule } from "./modules/contact/contact.module";
 import { ProfileModule } from "./modules/profile/profile.module";
 import { QueueModule } from "./modules/queue/queue.module";
 import { UserModule } from "./modules/user/user.module";
-import { StripRequestBodyPipe } from "./pipes/strip-req-body.pipe";
 import { ValidateIncomingInput } from "./pipes/validate-incoming-input.pipe";
 import routes from "./routes";
 import { EnvService } from "./shared/services/env.service";
@@ -68,7 +65,6 @@ import { SharedModule } from "./shared/shared.module";
     AuthModule,
     UserModule,
     ProfileModule,
-    ContactModule,
     QueueModule,
   ],
   providers: [
@@ -82,19 +78,11 @@ import { SharedModule } from "./shared/shared.module";
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: RequestInterceptor,
-    },
-    {
-      provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
     },
     {
       provide: APP_PIPE,
       useClass: ValidateIncomingInput,
-    },
-    {
-      provide: APP_PIPE,
-      useClass: StripRequestBodyPipe,
     },
     // Global exception filter should be placed at first
     {
