@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import { MailerService } from "@nestjs-modules/mailer";
-import { Address } from "@nestjs-modules/mailer/dist/interfaces/send-mail-options.interface";
 import { Processor, WorkerHost } from "@nestjs/bullmq";
 import { Job } from "bullmq";
 import * as fs from "fs/promises";
@@ -10,6 +9,11 @@ import path from "path";
 import { MailConfig } from "src/config/mail";
 import { InAppEmail, Queues } from "src/constants/queue.enum";
 import { EnvService } from "src/shared/services/env.service";
+
+interface Address {
+  name: string;
+  address: string;
+}
 
 export interface EmailJobData {
   to: string | Address;

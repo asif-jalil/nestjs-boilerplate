@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
     const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC, [context.getHandler(), context.getClass()]);
     const isUnauth = this.reflector.getAllAndOverride<boolean>(UNAUTH, [context.getHandler(), context.getClass()]);
 
-    if (isUnauth || isPublic) {
+    if (isUnauth) {
       return true;
     }
 

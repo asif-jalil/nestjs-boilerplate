@@ -1,11 +1,11 @@
 import { type ValidationArguments, type ValidationOptions, registerDecorator } from "class-validator";
 
 export function MatchField(property: string, validationOptions?: ValidationOptions): PropertyDecorator {
-  return function (object: object, propertyName: string) {
+  return function (object: object, propertyName: string | symbol) {
     registerDecorator({
       name: "MatchField",
       target: object.constructor,
-      propertyName,
+      propertyName: propertyName as string,
       options: validationOptions,
       constraints: [property],
       validator: {

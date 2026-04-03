@@ -41,7 +41,6 @@ export class CreateUsersTable1747336712476 implements MigrationInterface {
           {
             name: "verifiedAt",
             type: "timestamp",
-            default: false,
             isNullable: true
           },
           {
