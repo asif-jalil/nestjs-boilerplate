@@ -1,0 +1,153 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>New Software Request</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f6f8fa;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #222;
+      }
+      .container {
+        max-width: 600px;
+        margin: 24px auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(60, 72, 88, 0.08);
+        overflow: hidden;
+      }
+      .header {
+        background: #00296b;
+        color: #fff;
+        padding: 32px 32px 16px 32px;
+        text-align: center;
+      }
+      .header img {
+        height: 48px;
+        margin-bottom: 12px;
+      }
+      .title {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      .body {
+        padding: 32px;
+      }
+      .body h2 {
+        margin-top: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #1956b4;
+      }
+      .info-table {
+        width: 100%;
+        margin: 16px 0 24px 0;
+        border-collapse: collapse;
+        font-size: 15px;
+      }
+      .info-table td {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .info-table td.label {
+        color: #666;
+        width: 110px;
+        font-weight: 600;
+      }
+      .message-section {
+        margin: 20px 0 0 0;
+      }
+      .message-label {
+        color: #666;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 15px;
+      }
+      .message-content {
+        background: #f3f5f7;
+        border-radius: 6px;
+        padding: 16px;
+        font-size: 15px;
+        color: #222;
+        line-height: 1.5;
+        word-break: break-word;
+      }
+      .footer {
+        text-align: center;
+        padding: 18px 20px;
+        font-size: 13px;
+        background: #f3f5f7;
+        color: #8a8e9a;
+        border-top: 1px solid #eee;
+      }
+      .footer a {
+        color: #1956b4;
+        text-decoration: none;
+        margin: 0 8px;
+      }
+      @media only screen and (max-width: 620px) {
+        .container,
+        .body,
+        .header,
+        .footer {
+          padding-left: 10px !important;
+          padding-right: 10px !important;
+        }
+        .body {
+          padding-top: 22px !important;
+          padding-bottom: 22px !important;
+        }
+      }
+      @media only screen and (max-width: 420px) {
+        .header {
+          padding-top: 18px !important;
+          padding-bottom: 10px !important;
+        }
+        .body {
+          padding: 14px !important;
+        }
+        .footer {
+          padding: 10px 5px !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <img
+          src="https://mailerhunt.com/images/logo.png"
+          alt="MailerHunt Logo"
+          style="display:block;margin:0 auto;"
+        />
+        <div class="title">New Software Request</div>
+      </div>
+
+      <!-- Body -->
+      <div class="body">
+        <h2>Hello {{name || 'there'}}</h2>
+        <p>Please verify your email address.</p>
+        <a href="{{verifyUrl}}" class="btn">Verify</a>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        ©
+        {{year}}
+        MailerHunt Inc. All rights reserved.
+        <br />
+        <a href="https://mailerhunt.com/terms">Terms</a>
+        |
+        <a href="https://mailerhunt.com/privacy">Privacy</a>
+        |
+        <a href="https://mailerhunt.com/contact">Contact</a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -3,7 +3,7 @@ import { Response } from "express";
 import AppException from "../exceptions/app.exception";
 
 type Exception = {
-  response: Record<string, any>;
+  response: Record<string, unknown>;
   status: number;
 };
 
@@ -13,13 +13,13 @@ export class AppExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status = exception.status;
-    const message = exception.response.message as unknown;
+    const message = exception.response.message;
     const code = exception.response.code as string;
 
     response.status(status).json({
       success: false,
       message,
-      code,
+      code
     });
   }
 }

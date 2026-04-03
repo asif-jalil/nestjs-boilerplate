@@ -11,14 +11,14 @@ const workers = [];
 
 @Module({
   imports: [UserModule],
-  providers: [...consumers, ...workers],
+  providers: [...consumers, ...workers]
 })
 export class QueueModule {
   static register(): DynamicModule {
     const queues = BullModule.registerQueue(
       ...Object.values(Queues).map((queue) => ({
-        name: queue,
-      })),
+        name: queue
+      }))
     );
 
     if (!queues.providers || !queues.exports) {
@@ -32,17 +32,17 @@ export class QueueModule {
           imports: [ConfigModule],
           useFactory: (env: EnvService) => ({
             connection: {
-              url: env.redisConfig.url,
+              url: env.redisConfig.url
             },
-            defaultJobOptions: { attempts: 2, backoff: 2 },
+            defaultJobOptions: { attempts: 2, backoff: 2 }
           }),
-          inject: [EnvService],
+          inject: [EnvService]
         }),
-        queues,
+        queues
       ],
       global: true,
       providers: [...queues.providers],
-      exports: [...queues.exports],
+      exports: [...queues.exports]
     };
   }
 }

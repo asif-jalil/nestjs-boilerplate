@@ -64,6 +64,7 @@ export class EnvService {
   get appConfig() {
     return {
       port: this.getString("API_PORT"),
+      appUrl: this.getString("APP_URL")
     };
   }
 
@@ -73,16 +74,9 @@ export class EnvService {
     return {
       origin,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-      allowedHeaders: [
-        "Accept",
-        "Authorization",
-        "Content-Type",
-        "Origin",
-        "X-Requested-With",
-        "X-Factor-Auth",
-      ],
+      allowedHeaders: ["Accept", "Authorization", "Content-Type", "Origin", "X-Requested-With", "X-Factor-Auth"],
       optionsSuccessStatus: HttpStatus.OK,
-      credentials: true,
+      credentials: true
     };
   }
 
@@ -99,14 +93,14 @@ export class EnvService {
       migrations: [__dirname + "/../../../database/migrations/*{.ts,.js}"],
       migrationsTableName: "migrations",
       poolSize: 5,
-      logging: !this.isProduction,
+      logging: !this.isProduction
     };
   }
 
   get authConfig() {
     return {
       jwtSecret: this.getString("JWT_SECRET"),
-      encryptionSecret: this.getString("ENCRYPTION_SECRET"),
+      encryptionSecret: this.getString("ENCRYPTION_SECRET")
     };
   }
 
@@ -115,19 +109,19 @@ export class EnvService {
       host: this.getString("REDIS_HOST"),
       port: this.getNumber("REDIS_PORT"),
       password: this.getString("REDIS_PASSWORD"),
-      url: `redis://${this.getString("REDIS_USER")}:${this.getString("REDIS_PASSWORD")}@${this.getString("REDIS_HOST")}:${this.getNumber("REDIS_PORT")}`,
+      url: `redis://:${this.getString("REDIS_PASSWORD")}@${this.getString("REDIS_HOST")}:${this.getNumber("REDIS_PORT")}`
     };
   }
 
   get smtp() {
     return {
-      url: this.getString("SMTP_URL"),
+      url: this.getString("SMTP_URL")
     };
   }
 
   get recaptcha() {
     return {
-      secretKey: this.getString("GOOGLE_RECAPTCHA_SECRET_KEY"),
+      secretKey: this.getString("GOOGLE_RECAPTCHA_SECRET_KEY")
     };
   }
 }

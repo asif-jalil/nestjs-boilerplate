@@ -1,13 +1,6 @@
-import {
-  registerDecorator,
-  ValidationArguments,
-  ValidationOptions,
-} from "class-validator";
+import { type ValidationArguments, type ValidationOptions, registerDecorator } from "class-validator";
 
-export function MatchField(
-  property: string,
-  validationOptions?: ValidationOptions,
-): PropertyDecorator {
+export function MatchField(property: string, validationOptions?: ValidationOptions): PropertyDecorator {
   return function (object: object, propertyName: string) {
     registerDecorator({
       name: "MatchField",
@@ -16,7 +9,7 @@ export function MatchField(
       options: validationOptions,
       constraints: [property],
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: unknown, args: ValidationArguments) {
           const [relatedPropertyName] = args.constraints as string[];
           const obj = args.object as Record<string, unknown>;
           return value === obj[relatedPropertyName];
@@ -24,8 +17,8 @@ export function MatchField(
         defaultMessage(args: ValidationArguments) {
           const [relatedPropertyName] = args.constraints as string[];
           return `${args.property} must match ${relatedPropertyName}`;
-        },
-      },
+        }
+      }
     });
   };
 }

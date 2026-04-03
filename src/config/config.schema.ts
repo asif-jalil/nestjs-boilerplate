@@ -33,19 +33,11 @@
 
 import chalk from "chalk";
 import { plainToInstance } from "class-transformer";
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Max,
-  Min,
-  validateSync,
-} from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsString, Max, Min, validateSync } from "class-validator";
 
 export enum Environment {
   Development = "development",
-  Production = "production",
+  Production = "production"
 }
 
 export class EnvironmentVariables {
@@ -118,29 +110,28 @@ export class EnvironmentVariables {
 
 export function validate(config: Record<string, unknown>) {
   const validatedConfig = plainToInstance(EnvironmentVariables, config, {
-    enableImplicitConversion: true,
+    enableImplicitConversion: true
   });
   const errors = validateSync(validatedConfig, {
-    skipMissingProperties: false,
+    skipMissingProperties: false
   });
 
   if (errors.length > 0) {
     const message = errors
       .map((err) => {
-        const constraints = err.constraints
-          ? Object.values(err.constraints).join(", ")
-          : "";
+        const constraints = err.constraints ? Object.values(err.constraints).join(", ") : "";
         return `  ✖ ${chalk.bold(err.property)}: ${constraints}`;
       })
       .join("\n");
 
+    // eslint-disable-next-line no-console
     console.log(
       "\n" +
         chalk.bgRed.white.bold(" ENVIRONMENT CONFIGURATION ERROR ") +
         "\n\n" +
         message +
         "\n\n" +
-        chalk.yellowBright("💡 Please check your .env file and try again.\n"),
+        chalk.yellowBright("💡 Please check your .env file and try again.\n")
     );
 
     process.exit(1);

@@ -5,34 +5,26 @@ import {
   ValidationArguments,
   ValidationOptions,
   ValidatorConstraint,
-  ValidatorConstraintInterface,
+  ValidatorConstraintInterface
 } from "class-validator";
-import {
-  DataSource,
-  FindOptionsWhere,
-  ObjectLiteral,
-  Repository,
-} from "typeorm";
+import { DataSource, FindOptionsWhere, ObjectLiteral, Repository } from "typeorm";
 
 type FindConditionFn<T extends ObjectLiteral> = (
   repo: Repository<T>,
-  value: any,
-  args: ValidationArguments,
-) => Promise<any>;
+  value: unknown,
+  args: ValidationArguments
+) => Promise<unknown>;
 
 @ValidatorConstraint({ async: true })
 @Injectable()
-export class IsUniqueConstraint<T extends ObjectLiteral>
-  implements ValidatorConstraintInterface
-{
+export class IsUniqueConstraint<T extends ObjectLiteral> implements ValidatorConstraintInterface {
   constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
 
-  async validate(value: any, args: ValidationArguments): Promise<boolean> {
-    const [EntityClass, findConditionFnOrField] =
-      args.constraints as unknown as [
-        new () => T,
-        FindConditionFn<T> | keyof T,
-      ];
+  async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
+    const [EntityClass, findConditionFnOrField] = args.constraints as unknown as [
+      new () => T,
+      FindConditionFn<T> | keyof T
+    ];
 
     const repo = this.dataSource.getRepository(EntityClass);
 
@@ -41,9 +33,8 @@ export class IsUniqueConstraint<T extends ObjectLiteral>
     if (typeof findConditionFnOrField === "function") {
       existingRecord = await findConditionFnOrField(repo, value, args);
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       existingRecord = await repo.findOneBy({
-        [findConditionFnOrField]: value,
+        [findConditionFnOrField]: value
       } as FindOptionsWhere<T>);
     }
 
@@ -58,7 +49,7 @@ export class IsUniqueConstraint<T extends ObjectLiteral>
 export function IsUnique<T extends ObjectLiteral>(
   entity: new () => T,
   findConditionFnOrField: FindConditionFn<T> | keyof T,
-  validationOptions?: ValidationOptions,
+  validationOptions?: ValidationOptions
 ): PropertyDecorator {
   return function (target: object, propertyName: string | symbol) {
     registerDecorator({
@@ -66,7 +57,7 @@ export function IsUnique<T extends ObjectLiteral>(
       propertyName: propertyName.toString(),
       options: validationOptions,
       constraints: [entity, findConditionFnOrField],
-      validator: IsUniqueConstraint,
+      validator: IsUniqueConstraint
     });
   };
 }

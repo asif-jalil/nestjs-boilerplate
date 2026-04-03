@@ -2,14 +2,11 @@ import { HttpStatus } from "@nestjs/common";
 
 import AppException from "./app.exception";
 
-export default class UnprocessableException<
-  K extends string,
-  V,
-> extends AppException<K, V> {
+export default class UnprocessableException<K extends string, V> extends AppException<K, V> {
   constructor(message: string | Record<K, V>) {
     super(message, {
       code: "ValidationError",
-      status: HttpStatus.UNPROCESSABLE_ENTITY,
+      status: HttpStatus.UNPROCESSABLE_ENTITY
     });
   }
 }

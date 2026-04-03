@@ -6,6 +6,6 @@ import { UserRepository } from "./user.repo";
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   providers: [UserRepository],
-  exports: [UserRepository],
+  exports: [UserRepository]
 })
 export class UserModule {}

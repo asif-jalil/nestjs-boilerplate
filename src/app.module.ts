@@ -1,14 +1,8 @@
 import { MailerModule } from "@nestjs-modules/mailer";
-import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
+import { HandlebarsAdapter } from "@nestjs-modules/mailer/adapters/handlebars.adapter";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import {
-  APP_FILTER,
-  APP_GUARD,
-  APP_INTERCEPTOR,
-  APP_PIPE,
-  RouterModule,
-} from "@nestjs/core";
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE, RouterModule } from "@nestjs/core";
 import { ThrottlerModule } from "@nestjs/throttler";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import path from "path";
@@ -21,6 +15,7 @@ import { ResponseInterceptor } from "./interceptors/response.interceptor";
 import { AuthModule } from "./modules/auth/auth.module";
 import { ProfileModule } from "./modules/profile/profile.module";
 import { QueueModule } from "./modules/queue/queue.module";
+import { UserTokenModule } from "./modules/user-token/user-token.module";
 import { UserModule } from "./modules/user/user.module";
 import { ValidateIncomingInput } from "./pipes/validate-incoming-input.pipe";
 import routes from "./routes";
@@ -33,20 +28,20 @@ import { SharedModule } from "./shared/shared.module";
     ConfigModule.forRoot({
       envFilePath: ".env",
       isGlobal: true,
-      validate: validate,
+      validate: validate
     }),
     ThrottlerModule.forRoot({
       throttlers: [
         {
           ttl: 10000,
           limit: 5,
-          blockDuration: 3600000,
-        },
-      ],
+          blockDuration: 3600000
+        }
+      ]
     }),
     TypeOrmModule.forRootAsync({
       useFactory: (envService: EnvService) => envService.dbConfig,
-      inject: [EnvService],
+      inject: [EnvService]
     }),
     MailerModule.forRootAsync({
       inject: [EnvService],
@@ -55,10 +50,10 @@ import { SharedModule } from "./shared/shared.module";
           transport: envService.smtp.url,
           template: {
             dir: path.join(__dirname, "templates"),
-            adapter: new HandlebarsAdapter(),
-          },
+            adapter: new HandlebarsAdapter()
+          }
         };
-      },
+      }
     }),
     QueueModule.register(),
     SharedModule,
@@ -66,34 +61,35 @@ import { SharedModule } from "./shared/shared.module";
     UserModule,
     ProfileModule,
     QueueModule,
+    UserTokenModule
   ],
   providers: [
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
+      useClass: AuthGuard
     },
     {
       provide: APP_GUARD,
-      useClass: RolesGuard,
+      useClass: RolesGuard
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: ResponseInterceptor,
+      useClass: ResponseInterceptor
     },
     {
       provide: APP_PIPE,
-      useClass: ValidateIncomingInput,
+      useClass: ValidateIncomingInput
     },
     // Global exception filter should be placed at first
     {
       provide: APP_FILTER,
-      useClass: GlobalExceptionFilter,
+      useClass: GlobalExceptionFilter
     },
     // Other exception filters should be placed after global exception filter
     {
       provide: APP_FILTER,
-      useClass: AppExceptionFilter,
-    },
-  ],
+      useClass: AppExceptionFilter
+    }
+  ]
 })
 export class AppModule {}

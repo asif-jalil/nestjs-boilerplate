@@ -8,9 +8,9 @@ export class ProfileService {
   async getProfile(id: number) {
     return this.userRepo.findOneOrThrow(
       {
-        where: { id },
+        where: { id }
       },
-      "User not found",
+      "User not found"
     );
   }
 }

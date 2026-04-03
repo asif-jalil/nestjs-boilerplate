@@ -12,7 +12,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     this.redisClient = new Redis({
       host: this.env.redisConfig.host,
       port: this.env.redisConfig.port,
-      password: this.env.redisConfig.password,
+      password: this.env.redisConfig.password
     });
 
     this.redisClient.on("error", (e) => {
@@ -20,10 +20,12 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     });
 
     this.redisClient.on("connect", function () {
+      // eslint-disable-next-line no-console
       console.log("Connected to the Redis Server");
     });
 
     this.redisClient.on("ready", function () {
+      // eslint-disable-next-line no-console
       console.log("Redis Instance is Ready!");
     });
 
@@ -46,12 +48,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     await this.redisClient.del(`${prefix}:${key}`);
   }
 
-  async setWithExpiry(
-    prefix: string,
-    key: string,
-    value: string,
-    expiry: number,
-  ): Promise<void> {
+  async setWithExpiry(prefix: string, key: string, value: string, expiry: number): Promise<void> {
     await this.redisClient.set(`${prefix}:${key}`, value, "EX", expiry);
   }
 }

@@ -15,13 +15,13 @@ const providers: Provider[] = [
   GeneratorService,
   EncryptionService,
   UtilService,
-  IsUniqueConstraint,
+  IsUniqueConstraint
 ];
 
 @Global()
 @Module({
   imports: [RedisModule],
   providers,
-  exports: [...providers],
+  exports: [...providers]
 })
 export class SharedModule {}

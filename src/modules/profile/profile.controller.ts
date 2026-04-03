@@ -1,10 +1,5 @@
 import { Controller, Get, HttpCode, HttpStatus } from "@nestjs/common";
-import {
-  ApiBearerAuth,
-  ApiNotFoundResponse,
-  ApiOkResponse,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import { AuthUser } from "src/decorators/auth-user.decorator";
 import { ResponseMessage } from "src/decorators/response-message.decorator";
 import { User } from "../user/user.entity";
@@ -12,7 +7,7 @@ import { ProfileService } from "./profile.service";
 
 @ApiTags("profile")
 @Controller({
-  version: "1",
+  version: "1"
 })
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}

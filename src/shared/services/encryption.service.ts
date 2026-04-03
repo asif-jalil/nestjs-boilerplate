@@ -9,7 +9,7 @@ export class EncryptionService {
 
   constructor(private env: EnvService) {
     this.cryptr = new Cryptr(this.env.authConfig.encryptionSecret, {
-      saltLength: 12,
+      saltLength: 12
     });
   }
 

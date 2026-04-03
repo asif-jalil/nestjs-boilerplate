@@ -7,9 +7,7 @@ function exceptionFactory(validationErrors: ValidationError[]) {
 
   function mapErrors(errorList: ValidationError[], parentPath = "") {
     for (const error of errorList) {
-      const propertyPath = parentPath
-        ? `${parentPath}.${error.property}`
-        : error.property;
+      const propertyPath = parentPath ? `${parentPath}.${error.property}` : error.property;
 
       if (error.constraints) {
         errors[propertyPath] = Object.values(error.constraints).join(", ");
@@ -28,13 +26,13 @@ function exceptionFactory(validationErrors: ValidationError[]) {
 
 @Injectable()
 export class ValidateIncomingInput extends ValidationPipe {
-  constructor(options: Record<string, any>) {
+  constructor(options: Record<string, unknown>) {
     options = {
       ...options,
       stopAtFirstError: true,
       whitelist: true,
       exceptionFactory: exceptionFactory,
-      transform: true,
+      transform: true
     };
     super(options);
   }

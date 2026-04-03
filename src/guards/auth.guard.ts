@@ -18,18 +18,12 @@ export class AuthGuard implements CanActivate {
   constructor(
     private token: TokenService,
     private reflector: Reflector,
-    private userRepo: UserRepository,
+    private userRepo: UserRepository
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    const isUnauth = this.reflector.getAllAndOverride<boolean>(UNAUTH, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC, [context.getHandler(), context.getClass()]);
+    const isUnauth = this.reflector.getAllAndOverride<boolean>(UNAUTH, [context.getHandler(), context.getClass()]);
 
     if (isUnauth || isPublic) {
       return true;
@@ -46,7 +40,7 @@ export class AuthGuard implements CanActivate {
 
     if (!token) {
       throw new UnauthenticatedException({
-        message: "You need to sign in first.",
+        message: "You need to sign in first."
       });
     }
 
@@ -54,7 +48,7 @@ export class AuthGuard implements CanActivate {
 
     if (!payload.isValid || !payload.decoded) {
       throw new UnauthenticatedException({
-        message: "Invalid login",
+        message: "Invalid login"
       });
     }
 
@@ -64,20 +58,20 @@ export class AuthGuard implements CanActivate {
         name: true,
         email: true,
         role: true,
-        isVerified: true,
+        isVerified: true
       },
-      where: { id: payload.decoded.id },
+      where: { id: payload.decoded.id }
     });
 
     if (!user) {
       throw new UnauthenticatedException({
-        message: "You are not authenticated",
+        message: "You are not authenticated"
       });
     }
 
     if (!user.isVerified) {
       throw new UnauthenticatedException({
-        message: "Your account is not verified",
+        message: "Your account is not verified"
       });
     }
 

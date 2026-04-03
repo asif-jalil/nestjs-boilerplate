@@ -11,9 +11,10 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const permittedRole = this.reflector.getAllAndOverride<
-      RolesEnum[] | undefined
-    >(ROLES_KEY, [context.getHandler(), context.getClass()]);
+    const permittedRole = this.reflector.getAllAndOverride<RolesEnum[] | undefined>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass()
+    ]);
 
     if (!permittedRole) {
       return true;
@@ -23,7 +24,7 @@ export class RolesGuard implements CanActivate {
 
     if (!request.user) {
       throw new UnauthenticatedException({
-        message: "User not authenticated",
+        message: "User not authenticated"
       });
     }
 
@@ -31,7 +32,7 @@ export class RolesGuard implements CanActivate {
 
     if (!permittedRole.includes(userRole)) {
       throw new UnauthorizedException({
-        message: "Permission denied",
+        message: "Permission denied"
       });
     }
 

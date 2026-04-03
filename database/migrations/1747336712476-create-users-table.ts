@@ -1,67 +1,67 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { type MigrationInterface, type QueryRunner, Table } from "typeorm";
 
 export class CreateUsersTable1747336712476 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'users',
+        name: "users",
         columns: [
           {
-            name: 'id',
-            type: 'int',
+            name: "id",
+            type: "int",
             isPrimary: true,
             isGenerated: true,
-            generationStrategy: 'increment',
+            generationStrategy: "increment",
             isNullable: false,
-            unsigned: true,
+            unsigned: true
           },
           {
-            name: 'name',
-            type: 'varchar',
-            length: '50',
-            isNullable: true,
+            name: "name",
+            type: "varchar",
+            length: "50",
+            isNullable: true
           },
           {
-            name: 'email',
-            type: 'varchar',
+            name: "email",
+            type: "varchar",
             isNullable: false,
-            isUnique: true,
+            isUnique: true
           },
           {
-            name: 'password',
-            type: 'varchar',
-            isNullable: false,
+            name: "password",
+            type: "varchar",
+            isNullable: false
           },
           {
-            name: 'role',
-            type: 'varchar',
-            length: '20',
-            isNullable: false,
+            name: "role",
+            type: "varchar",
+            length: "20",
+            isNullable: false
           },
           {
-            name: 'isVerified',
-            type: 'boolean',
+            name: "verifiedAt",
+            type: "timestamp",
             default: false,
-            isNullable: false,
+            isNullable: true
           },
           {
-            name: 'createdAt',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-            isNullable: false,
+            name: "createdAt",
+            type: "timestamp",
+            default: "CURRENT_TIMESTAMP",
+            isNullable: false
           },
           {
-            name: 'updatedAt',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-            isNullable: false,
-          },
-        ],
-      }),
+            name: "updatedAt",
+            type: "timestamp",
+            default: "CURRENT_TIMESTAMP",
+            isNullable: false
+          }
+        ]
+      })
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('users');
+    await queryRunner.dropTable("users");
   }
 }

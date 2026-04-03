@@ -19,8 +19,12 @@ export class User extends AbstractEntity {
   @Column({ type: "varchar", length: 20, nullable: false })
   role: RolesEnum;
 
-  @Column({ type: "boolean", default: false, nullable: false })
-  isVerified: boolean;
+  @Column({ type: "timestamp", nullable: true })
+  verifiedAt: Date;
+
+  get isVerified(): boolean {
+    return !!this.verifiedAt;
+  }
 
   @Exclude()
   private tempPassword?: string;

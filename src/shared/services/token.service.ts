@@ -17,12 +17,11 @@ export class TokenService {
   constructor(
     private jwt: JwtService,
     private env: EnvService,
-    private encryption: EncryptionService,
+    private encryption: EncryptionService
   ) {}
 
   public extract(request: Request): string | null {
-    const [type, encryptedToken] =
-      request.headers.authorization?.split(" ") ?? [];
+    const [type, encryptedToken] = request.headers.authorization?.split(" ") ?? [];
     const token = type === "Bearer" ? encryptedToken : null;
 
     if (!token) return null;
@@ -34,12 +33,12 @@ export class TokenService {
 
   public async signToken(user: Partial<User>) {
     const data = {
-      id: user.id,
+      id: user.id
     };
 
     const token = await this.jwt.signAsync(data, {
       expiresIn: "7d",
-      secret: this.env.authConfig.jwtSecret,
+      secret: this.env.authConfig.jwtSecret
     });
 
     const encrypted = this.encryption.encrypt(token);
@@ -50,17 +49,17 @@ export class TokenService {
   public decodeToken(token: string) {
     try {
       const decoded = this.jwt.verify<JwtPayload>(token, {
-        secret: this.env.authConfig.jwtSecret,
+        secret: this.env.authConfig.jwtSecret
       });
 
       return {
         isValid: true,
-        decoded,
+        decoded
       };
     } catch (error: unknown) {
       return {
         isValid: false,
-        error: error instanceof Error ? error.message : String(error),
+        error: error instanceof Error ? error.message : String(error)
       };
     }
   }

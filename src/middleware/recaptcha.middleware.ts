@@ -8,6 +8,7 @@ import { UtilService } from "src/shared/services/util.service";
 export type RecaptchaResponse = {
   data: {
     success: boolean;
+    score: number;
     challenge_ts?: string;
     hostname?: string;
     "error-codes"?: string[];
@@ -23,7 +24,7 @@ export type VerifyRecaptchaResponse = {
 export class RecaptchaMiddleware implements NestMiddleware {
   constructor(
     private readonly env: EnvService,
-    private readonly util: UtilService,
+    private readonly util: UtilService
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
@@ -31,28 +32,25 @@ export class RecaptchaMiddleware implements NestMiddleware {
 
     if (!recaptchaToken) {
       throw new UnauthorizedException({
-        message: "Verification failed",
+        message: "Verification failed"
       });
     }
 
     const isVerified = await this.verifyRecaptcha(req, {
       secret: this.env.recaptcha.secretKey,
-      token: recaptchaToken,
+      token: recaptchaToken
     });
 
     if (!isVerified) {
       throw new UnauthorizedException({
-        message: "You are not authorized according to our verification",
+        message: "You are not authorized according to our verification"
       });
     }
 
     next();
   }
 
-  async verifyRecaptcha(
-    req: Request,
-    { secret, token }: VerifyRecaptchaResponse,
-  ) {
+  async verifyRecaptcha(req: Request, { secret, token }: VerifyRecaptchaResponse) {
     try {
       const response = await axios({
         url: "https://www.google.com/recaptcha/api/siteverify",
@@ -60,8 +58,8 @@ export class RecaptchaMiddleware implements NestMiddleware {
         params: {
           secret,
           response: token,
-          remoteip: this.util.getIpAddress(req),
-        },
+          remoteip: this.util.getIpAddress(req)
+        }
       });
 
       const isVerified = this.verifyResponse(response);
@@ -73,8 +71,8 @@ export class RecaptchaMiddleware implements NestMiddleware {
   }
 
   verifyResponse(response: RecaptchaResponse) {
-    const { success } = response.data;
+    const { success, score } = response.data;
 
-    return success;
+    return score > 0.05 && success;
   }
 }

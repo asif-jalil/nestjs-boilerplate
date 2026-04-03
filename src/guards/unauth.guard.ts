@@ -10,14 +10,11 @@ import { TokenService } from "src/shared/services/token.service";
 export class UnauthGuard implements CanActivate {
   constructor(
     private token: TokenService,
-    private reflector: Reflector,
+    private reflector: Reflector
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC, [context.getHandler(), context.getClass()]);
 
     if (isPublic) {
       return true;
@@ -28,7 +25,7 @@ export class UnauthGuard implements CanActivate {
 
     if (token) {
       throw new UnauthorizedException({
-        message: "You are already signed in",
+        message: "You are already signed in"
       });
     }
 

@@ -1,19 +1,11 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  UseGuards,
-} from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
+  ApiUnauthorizedResponse
 } from "@nestjs/swagger";
 import { AccessToken } from "src/decorators/access-token.decorator";
 import { ResponseMessage } from "src/decorators/response-message.decorator";
@@ -26,7 +18,7 @@ import { RegisterDto } from "./dtos/registration.dto";
 
 @ApiTags("auth")
 @Controller({
-  version: "1",
+  version: "1"
 })
 @UseGuards(ThrottlerIpGuard)
 export class AuthController {
@@ -49,10 +41,10 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "User has been logged successfully" })
   @ApiNotFoundResponse({
-    description: "Username and password does not matched",
+    description: "Username and password does not matched"
   })
   @ApiBadRequestResponse({
-    description: "Username and password does not matched",
+    description: "Username and password does not matched"
   })
   login(@Body() loginUserDto: LoginDto) {
     return this.authService.login(loginUserDto);

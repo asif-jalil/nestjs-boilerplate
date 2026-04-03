@@ -18,7 +18,7 @@ async function bootstrap() {
   app.use(compression());
   app.enableCors(envService.corsConfig);
   app.enableVersioning({
-    type: VersioningType.URI,
+    type: VersioningType.URI
   });
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
@@ -37,12 +37,13 @@ async function bootstrap() {
   const port = envService.appConfig.port;
 
   await app.listen(port).then(async () => {
+    // eslint-disable-next-line no-console
     console.log(
       `
         #############################################
         🔥  Server listening on: ${chalk.bold(await app.getUrl())} 🔥
         #############################################
-      `,
+      `
     );
   });
 }
