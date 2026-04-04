@@ -5,7 +5,9 @@ import { ConfigModule } from "@nestjs/config";
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE, RouterModule } from "@nestjs/core";
 import { ThrottlerModule } from "@nestjs/throttler";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { WinstonModule } from "nest-winston";
 import path from "path";
+import * as winston from "winston";
 import { validate } from "./config/config.schema";
 import { AppExceptionFilter } from "./filters/app-exception.filter";
 import { GlobalExceptionFilter } from "./filters/global-exception.filter";
@@ -54,6 +56,37 @@ import { SharedModule } from "./shared/shared.module";
           }
         };
       }
+    }),
+    WinstonModule.forRoot({
+      transports: [
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+            winston.format.colorize({ all: true }),
+            winston.format.printf((info) => {
+              const { timestamp, level, message, context, stack } = info as {
+                timestamp?: string;
+                level: string;
+                message: string;
+                context?: string;
+                stack?: string;
+              };
+              const ctx = context ? `[${context}]` : "";
+              const trace = stack ? `\n${stack}` : "";
+              return `${timestamp} ${level} ${ctx}: ${message}${trace}`;
+            })
+          )
+        }),
+        new winston.transports.File({
+          filename: "logs/error.log",
+          level: "error",
+          format: winston.format.combine(winston.format.timestamp(), winston.format.json())
+        }),
+        new winston.transports.File({
+          filename: "logs/combined.log",
+          format: winston.format.combine(winston.format.timestamp(), winston.format.json())
+        })
+      ]
     }),
     QueueModule.register(),
     SharedModule,

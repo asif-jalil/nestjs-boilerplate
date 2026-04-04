@@ -1,0 +1,3 @@
+export const VERIFY_EMAIL_EXPIRY_MINUTES = 1440; // 24 hours
+export const RESET_PASSWORD_EXPIRY_MINUTES = 15;
+export const MAX_VERIFICATION_SEND_COUNT = 5;

@@ -25,7 +25,7 @@ export class UserToken extends AbstractEntity {
   @ManyToOne(() => User)
   user: User;
 
-  public isExpired() {
-    return moment(this.updatedAt) < moment().subtract(5, "minutes");
+  public isExpired(minutes = 5) {
+    return moment(this.updatedAt) < moment().subtract(minutes, "minutes");
   }
 }

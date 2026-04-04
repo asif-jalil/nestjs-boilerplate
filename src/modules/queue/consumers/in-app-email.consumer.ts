@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import { MailerService } from "@nestjs-modules/mailer";
 import { Processor, WorkerHost } from "@nestjs/bullmq";
+import { Logger } from "@nestjs/common";
 import { Job } from "bullmq";
 import * as fs from "fs/promises";
 import Handlebars from "handlebars";
@@ -33,8 +33,17 @@ export interface BaseEmailData {
 
 @Processor(Queues.IN_APP_EMAIL)
 export class InAppEmailConsumer extends WorkerHost {
+  private readonly logger = new Logger(InAppEmailConsumer.name);
+
+  constructor(
+    private readonly mailService: MailerService,
+    private readonly env: EnvService
+  ) {
+    super();
+  }
+
   private getEmailConfigs(jobName: InAppEmail, data: BaseEmailData): EmailJobData[] {
-    const baseContext = { ...data, year: new Date().getFullYear() };
+    const baseContext = { ...data.context, year: new Date().getFullYear() };
 
     switch (jobName) {
       case InAppEmail.GET_IN_TOUCH:
@@ -78,16 +87,20 @@ export class InAppEmailConsumer extends WorkerHost {
           }
         ];
 
+      case InAppEmail.RESET_PASSWORD:
+        return [
+          {
+            subject: "Reset your password",
+            template: "reset-password",
+            to: data.to,
+            from: { name: MailConfig.FROM_NAME, address: MailConfig.FROM_EMAIL },
+            context: baseContext
+          }
+        ];
+
       default:
         return [];
     }
-  }
-
-  constructor(
-    private readonly mailService: MailerService,
-    private readonly env: EnvService
-  ) {
-    super();
   }
 
   private async sendEmail(config: EmailJobData): Promise<void> {
@@ -98,17 +111,11 @@ export class InAppEmailConsumer extends WorkerHost {
         const template = Handlebars.compile(email.toString());
         const html = template(config.context ?? {});
 
-        console.log("App not running in production, dumping the content:");
-        console.log("--- start");
-        console.log({
-          to: config.to,
-          subject: config.subject,
-          template: config.template
-        });
-        console.log(htmlToText(html));
-        console.log("--- end");
+        this.logger.debug("Email not sent (development mode)");
+        this.logger.debug(JSON.stringify({ to: config.to, subject: config.subject, template: config.template }));
+        this.logger.debug(htmlToText(html));
       } catch (error) {
-        console.error("Template not found or error processing template:", error);
+        this.logger.error("Template error", error instanceof Error ? error.stack : String(error));
       }
       return;
     }
@@ -123,7 +130,7 @@ export class InAppEmailConsumer extends WorkerHost {
     const emailConfigs = this.getEmailConfigs(jobName, data);
 
     if (emailConfigs.length === 0) {
-      console.error(`Unknown email job type: ${jobName}`);
+      this.logger.error(`Unknown email job type: ${jobName}`);
       return;
     }
 

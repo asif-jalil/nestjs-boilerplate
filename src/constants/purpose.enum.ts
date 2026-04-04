@@ -1,3 +1,4 @@
 export enum PurposeEnum {
-  VERIFY_EMAIL = "verify-email"
+  VERIFY_EMAIL = "verify-email",
+  RESET_PASSWORD = "reset-password"
 }

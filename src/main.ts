@@ -5,27 +5,30 @@ import chalk from "chalk";
 import { useContainer } from "class-validator";
 import compression from "compression";
 import helmet from "helmet";
+import { WINSTON_MODULE_NEST_PROVIDER } from "nest-winston";
 import "reflect-metadata";
 import { AppModule } from "./app.module";
 import { EnvService } from "./shared/services/env.service";
 import { SharedModule } from "./shared/shared.module";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+
   const envService = app.select(SharedModule).get(EnvService);
+
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
   app.use(helmet());
   app.use(compression());
   app.enableCors(envService.corsConfig);
-  app.enableVersioning({
-    type: VersioningType.URI
-  });
+  app.enableVersioning({ type: VersioningType.URI });
+  app.enableShutdownHooks();
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   if (envService.isDevelopment) {
     const config = new DocumentBuilder()
-      .setTitle("Hire Smart API doc")
+      .setTitle("API Documentation")
       .setDescription("Find the API from here")
       .setVersion("1.0")
       .addBearerAuth()

@@ -77,6 +77,17 @@
         line-height: 1.5;
         word-break: break-word;
       }
+      .btn {
+        display: inline-block;
+        margin-top: 24px;
+        padding: 12px 32px;
+        background: #00296b;
+        color: #fff;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 15px;
+      }
       .footer {
         text-align: center;
         padding: 18px 20px;
@@ -122,8 +133,8 @@
       <!-- Header -->
       <div class="header">
         <img
-          src="https://mailerhunt.com/images/logo.png"
-          alt="MailerHunt Logo"
+          src="YOUR_LOGO_URL"
+          alt="Logo"
           style="display:block;margin:0 auto;"
         />
         <div class="title">New Software Request</div>
@@ -131,7 +142,7 @@
 
       <!-- Body -->
       <div class="body">
-        <h2>Hello {{name || 'there'}}</h2>
+        <h2>Hello {{#if name}}{{name}}{{else}}there{{/if}}</h2>
         <p>Please verify your email address.</p>
         <a href="{{verifyUrl}}" class="btn">Verify</a>
       </div>
