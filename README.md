@@ -283,8 +283,9 @@ This project is licensed under the UNLICENSED License.
    - Check Redis configuration in `.env`
 
 3. **Build Errors**
-   - Run `npm run clean:install`
+   - Run `npm run clean`
    - Check Node.js version (18+)
+   - Build again
 
 4. **Migration Errors**
    - Check database connection
